@@ -1,6 +1,10 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
+#include <semaphore.h>
+#include <vector>
+
 
 int  range;
 
@@ -8,10 +12,12 @@ int  thread_num;
 
 pthread_t  tid[100];
 
+sem_t  sem;
+
 
 bool isPrime(int num){
 	
-	for(int i = 2; i < num; i++){
+	for(int i = 2; i < sqrt(num) +1; i++){
 
 		if(num % i == 0)
 			return false;
@@ -22,20 +28,34 @@ bool isPrime(int num){
 
 void* searchRange(void *param){
 
-	int tid =  (int)param;
+	long int tid =  (long int)param;
 
 	int min = (tid*(range/thread_num))+1;
 	int max = (tid+1)*(range/thread_num);
 
 
-	printf(" THREAD#%d : ", tid);
+	std::vector<int>  primes;
 
 	for(int i = min; i <= max; i++){
 
 		if(isPrime(i))
-			printf("%3d ", i);
+			primes.push_back(i);
 
 	}
+
+
+	sem_wait(&sem);		// ENTERING CRITICAL REGION! ------------------------
+
+	printf(" THREAD#%d : ", tid);
+
+	while(!primes.empty()){
+
+		printf("%3d ", primes.back());
+		primes.pop_back();
+	}
+
+	sem_post(&sem);		// ------------------------- EXITING CRITICAL REGION!
+
 
 	printf("\n");
 }
@@ -65,6 +85,9 @@ int main(int argc, char* argv[]){
 	printf("Computing primes between 1 and %3d with the use of %3d THREADS.\n",
 	        range, thread_num);
 	printf("---------------------------------------------------------------\n");
+
+
+	sem_init(&sem, NULL, 1);
 
 
 	for(int i = 0; i < thread_num; i++){

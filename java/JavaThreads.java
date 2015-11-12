@@ -1,13 +1,19 @@
+import java.lang.Math;
+import java.util.concurrent.Semaphore;
+import java.util.Vector;
+
 public class JavaThreads{
 
 	static int  range;
 
 	static int  thread_num;
     
+	static final Semaphore  sem = new Semaphore(1, true);
+
 
 	static boolean isPrime(int num){
 
-		for(int i = 2; i < num; i++){
+		for(int i = 2; i < Math.sqrt(num) + 1; i++){
 
 			if(num % i == 0)
 			return false;
@@ -31,15 +37,35 @@ public class JavaThreads{
 			int min = (tid*(range/thread_num))+1;
 			int max = (tid+1)*(range/thread_num);
 
-			System.out.printf(" THREAD#%d : ", tid);
+
+			Vector<Integer>  primes = new Vector<Integer>();
 
 			for(int i = min; i <= max; i++){
 
 				if(isPrime(i))
-					System.out.printf("%3d ", i);
+					primes.addElement(i);
 			}
-            
+
+			try{
+				sem.acquire();	// ENTERING CRITICAL REGION! --------
+
+			} catch(InterruptedException ie){
+
+			}
+ 
+			System.out.printf(" THREAD#%d : ", tid);
+
+			while(!primes.isEmpty()){
+
+				System.out.printf("%3d ", primes.firstElement());
+				primes.removeElementAt(0);
+			}
+
+			sem.release();	// ----------------- EXITING CRITICAL REGION!
+
+
 			System.out.println();
+
 		}
 	}
 
