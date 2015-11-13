@@ -1,3 +1,12 @@
+/* Author:      Matt W. Martin, 4374851
+ *              kaethis@tasmantis.net
+ *
+ * Project:     CS3790, Lab 02:
+ *              Calculating Primes w/ THREADS (now w/ SEMAPHORES)
+ *              Java Implementation
+ *
+ * File:        JavaThreads.java */
+
 import java.lang.Math;
 import java.util.concurrent.Semaphore;
 import java.util.Vector;
@@ -61,11 +70,9 @@ public class JavaThreads{
 				primes.removeElementAt(0);
 			}
 
-			sem.release();	// ----------------- EXITING CRITICAL REGION!
-
-
 			System.out.println();
 
+			sem.release();	// ----------------- EXITING CRITICAL REGION!
 		}
 	}
 

@@ -1,3 +1,12 @@
+/* Author:      Matt W. Martin, 4374851
+ *              kaethis@tasmantis.net
+ *
+ * Project:     CS3790, Lab 02:
+ *              Calculating Primes w/ THREADS (now w/ SEMAPHORES)
+ *		C++ Implementation
+ *
+ * File:        prog.cpp */
+
 #include <pthread.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -54,10 +63,9 @@ void* searchRange(void *param){
 		primes.pop_back();
 	}
 
-	sem_post(&sem);		// ------------------------- EXITING CRITICAL REGION!
-
-
 	printf("\n");
+
+	sem_post(&sem);		// ------------------------- EXITING CRITICAL REGION!
 }
 
 int main(int argc, char* argv[]){
