@@ -11,8 +11,8 @@ Author: 	Matt W. Martin, 4374851
 Project:	CS3790, Lab 02:
 		Calculating Primes w/ THREADS (now w/ SEMAPHORES)
 
-Date Issued:	
-Date Archived:	
+Date Issued:	14-Oct-2015
+Date Archived:	12-Nov-2015
 
 File:		README.txt
 
